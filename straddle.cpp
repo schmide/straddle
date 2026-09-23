@@ -233,8 +233,14 @@ int main() {
 
     // top64 / land64: where each run starts within its 64-byte block.
     // crosses64: 1 if either run spans two 64-byte blocks (the predicted-slow case).
-    std::printf("%s,fn_mod64,top64,top_len,land64,bottom_len,crosses64,ns_per_iter,cycles\n",
-                STEP_NAME);
+    // asm mode knows the loop's exact layout and prints it; C++ mode doesn't, so it
+    // prints only the columns it can fill (read positions from the disassembly).
+    if (STRADDLE_ASM)
+        std::printf("%s,fn_mod64,top64,top_len,land64,bottom_len,crosses64,ns_per_iter,cycles\n",
+                    STEP_NAME);
+    else
+        std::printf("%s,fn_mod64,ns_per_iter,cycles\n", STEP_NAME);
+
     auto crosses = [](uintptr_t a, uintptr_t b) { return (a / 64) != ((b - 1) / 64); };
     int slow = 0, cross = 0, cross_slow = 0, slow_nocross = 0;
     for (int i = 0; i < N_STEPS; i++) {
@@ -243,7 +249,7 @@ int main() {
         slow += is_slow;
         const unsigned fn64 = unsigned(reinterpret_cast<uintptr_t>(table[i]) & 63);
         std::printf("%d,%u,", i * GAP_STEP, fn64);
-        if (lay[i].top) {
+        if (STRADDLE_ASM) {
             const Layout& L = lay[i];
             const bool c = crosses(L.top, L.top_end) || crosses(L.land, L.end);
             cross += c;
@@ -251,8 +257,6 @@ int main() {
             slow_nocross += !c && is_slow;
             std::printf("%u,%u,%u,%u,%d,", unsigned(L.top & 63), unsigned(L.top_end - L.top),
                         unsigned(L.land & 63), unsigned(L.end - L.land), int(c));
-        } else {
-            std::printf(",,,,,");   // C++ mode: read positions from the disassembly
         }
         std::printf("%.3f,%.2f\n", ns[i], cyc);
     }
