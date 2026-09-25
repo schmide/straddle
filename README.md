@@ -164,7 +164,7 @@ large K and call a function instead; that version is also a different loop.
   Zen 5). **Not yet tested:** the ARM64 path and the CMake file. Reports welcome.
 - **Apple Silicon** uses 128-byte cache lines, so the 64-byte columns may not be the
   right measure there. The loop is aligned to 128 bytes in asm mode, so `top64` and
-  `back64` plus the gap still tell you the position within a 128-byte block.
+  `land64` plus the gap still tell you the position within a 128-byte block.
 - The ~1.2-cycle rows seen on Zen 5 in some builds are a smaller, separate effect this
   rule does not explain.
 
