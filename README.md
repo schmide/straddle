@@ -1,6 +1,6 @@
 # Prelude
 
-The path: after reading the blog post below, we set out to see whether taken
+The path: after reading the [blog post below](#background), we set out to see whether taken
 branches were really as costly as it showed. That meant many tests, ending with
 this program. Along the way we tested data alignment, predication, variable
 width, likely/unlikely hints, and a few other odd things.
