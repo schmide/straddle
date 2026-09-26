@@ -160,8 +160,8 @@ large K and call a function instead; that version is also a different loop.
   iteration, which holds on the CPUs tested because each iteration waits on the
   previous `i++`. For true cycle counts use `perf stat -e cycles` on Linux or AMD uProf
   on Windows.
-- **Tested:** x86-64 asm and C++ modes (GCC 13, Linux) and C++ mode (MSVC, Zen 3 and
-  Zen 5). **Not yet tested:** the ARM64 path and the CMake file. Reports welcome.
+- **Tested:** x86-64 asm and C++ modes (GCC 13, Linux) and C++ mode (MSVC, CMake, Zen 3 and
+  Zen 5). **Not yet tested:** the ARM64 path. Reports welcome.
 - **Apple Silicon** uses 128-byte cache lines, so the 64-byte columns may not be the
   right measure there. The loop is aligned to 128 bytes in asm mode, so `top64` and
   `land64` plus the gap still tell you the position within a 128-byte block.
